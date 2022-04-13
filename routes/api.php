@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +16,20 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-//AUTH ENDPOINTS
-Route::post('/register', [AuthController::class, 'register']); 
-Route::group([ 
-    'middleware' => 'jwt.auth' 
-], function () { 
-    Route::post('/logout', [AuthController::class, 'logout']); 
-    Route::post('/login', [AuthController::class, 'login']); 
-    Route::get('/me', [AuthController::class, 'me']); 
+//AUTHS
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::group([
+    'middleware' => 'jwt.auth'
+], function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+
+
+    //USERS
+    Route::get('/users', [UserController::class, 'getAll']);
+    Route::get('/users/{id}', [UserController::class, 'getById']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'delete']);
 });
