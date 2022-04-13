@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PartyController;
+// use App\Http\Controllers\MembershipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +34,16 @@ Route::group([
     Route::get('/users/{id}', [UserController::class, 'getById']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'delete']);
+
+
+    //PARTIES
+    Route::post('/parties', [PartyController::class, 'create']);
+    Route::get('/parties', [PartyController::class, 'getAll']);
+    Route::get('/parties/getByUser/{id}', [PartyController::class, 'getByUser']);
+    Route::get('/parties/getByGame/{id}', [PartyController::class, 'getByGame']);
+    Route::get('/parties/{id}', [PartyController::class, 'getById']);
+    Route::put('/parties/{id}', [PartyController::class, 'update']);
+    Route::delete('/parties/{id}', [PartyController::class, 'delete']);
+
+
 });
