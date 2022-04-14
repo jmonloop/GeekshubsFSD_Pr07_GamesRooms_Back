@@ -68,6 +68,10 @@ Route::group([
 
 
     //MESSAGES
-
+    Route::post('/messages', [MessageController::class, 'create']);
+    Route::get('/messages', [MessageController::class, 'getAll']);
+    Route::get('/messages/{id}', [MessageController::class, 'getById']);
+    Route::put('/messages/{id}', [MessageController::class, 'update']);
+    Route::delete('/messages/{id}', [MessageController::class, 'delete']);
 
 });

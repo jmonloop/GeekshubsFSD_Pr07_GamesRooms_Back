@@ -35,40 +35,40 @@ class MessageController extends Controller
         return response()->json($message, 200);
     }
 
-    //GET GAME BY ID
+    //GET MESSAGE BY ID
     public function getById($id)
     {
-        $game = Game::find($id);
+        $message = Message::find($id);
 
-        if (!$game) {
+        if (!$message) {
             return response()->json([
-                'message' => 'Game not found'
+                'message' => 'Message not found'
             ], 404);
         }
 
-        return response()->json($game, 200);
+        return response()->json($message, 200);
     }
 
-    //GET ALL GAMES
+    //GET ALL MESSAGES
     public function getAll()
     {
-        $games = Game::all();
+        $messages = Message::all();
 
-        if (!$games) {
+        if (!$messages) {
             return response()->json([
-                'message' => 'No games found'
+                'message' => 'No messages found'
             ], 404);
         }
 
-        return response()->json($games, 200);
+        return response()->json($messages, 200);
     }
 
 
-    //UPDATE GAME
+    //UPDATE MESSAGE
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'required|string',
+            'text' => 'required|string',
         
         ]);
 
@@ -79,35 +79,35 @@ class MessageController extends Controller
             ], 400);
         }
 
-        $game = Game::find($id);
+        $message = Message::find($id);
 
-        if (!$game) {
+        if (!$message) {
             return response()->json([
-                'message' => 'Game not found'
+                'message' => 'Message not found'
             ], 404);
         }
 
-        $game->title = $request->title;
+        $message->text = $request->text;
     
 
-        return response()->json($game, 200);
+        return response()->json($message, 200);
     }
 
-    //DELETE GAME
+    //DELETE MESSAGE
     public function delete($id)
     {
-        $game = Game::find($id);
+        $message = Message::find($id);
 
-        if (!$game) {
+        if (!$message) {
             return response()->json([
-                'message' => 'Game not found'
+                'message' => 'Message not found'
             ], 404);
         }
 
-        $game->delete();
+        $message->delete();
 
         return response()->json([
-            'message' => 'Game deleted'
+            'message' => 'Message deleted'
         ], 200);
     }
 
