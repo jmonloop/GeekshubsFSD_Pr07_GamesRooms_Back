@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\GameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,5 +55,12 @@ Route::group([
     Route::get('/memberships/{id}', [MembershipController::class, 'get']);
     Route::delete('/memberships/{id}', [MembershipController::class, 'delete']);
 
+
+    //GAMES
+    Route::post('/games', [GameController::class, 'create']);
+    Route::get('/games', [GameController::class, 'getAll']);
+    Route::get('/games/{id}', [GameController::class, 'getById']);
+    Route::put('/games/{id}', [GameController::class, 'update']);
+    Route::delete('/games/{id}', [GameController::class, 'delete']);
 
 });
