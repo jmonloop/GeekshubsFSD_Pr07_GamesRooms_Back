@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PartyController;
-// use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\MembershipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +44,15 @@ Route::group([
     Route::get('/parties/{id}', [PartyController::class, 'getById']);
     Route::put('/parties/{id}', [PartyController::class, 'update']);
     Route::delete('/parties/{id}', [PartyController::class, 'delete']);
+
+
+    //MEMBERSHIPS
+    Route::post('/memberships', [MembershipController::class, 'create']);
+    Route::get('/memberships', [MembershipController::class, 'getAll']);
+    Route::get('/memberships/user/{user_id}', [MembershipController::class, 'getByUser']);
+    Route::get('/memberships/party/{party_id}', [MembershipController::class, 'getByParty']);
+    Route::get('/memberships/{id}', [MembershipController::class, 'get']);
+    Route::delete('/memberships/{id}', [MembershipController::class, 'delete']);
 
 
 });
