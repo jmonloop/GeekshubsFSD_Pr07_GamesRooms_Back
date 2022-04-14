@@ -1,10 +1,23 @@
 <?php
 
+
+
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
+//CONSOLE.LOG CUSTOM FUNCTION
+function conslog($data)
+{
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+};
 
 class UserController extends Controller
 {
@@ -56,6 +69,15 @@ class UserController extends Controller
     {
 
         try {
+            $userAuth = auth()->user();
+
+            if (($userAuth->isAdmin == false) && ($userAuth->id != $id)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "You don't have permissions to perform this action"
+                ], 400);
+            }
+
             $validator = Validator::make($request->all(), [
                 'email' => 'required|string|email|max:255|unique:users',
             ]);
@@ -91,6 +113,16 @@ class UserController extends Controller
     public function delete($id)
     {
         try {
+            $userAuth = auth()->user();
+
+            if (($userAuth->isAdmin == false) && ($userAuth->id != $id)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "You don't have permissions to perform this action"
+                ], 400);
+            }
+
+
             $user = User::find($id);
             $user->delete();
 
