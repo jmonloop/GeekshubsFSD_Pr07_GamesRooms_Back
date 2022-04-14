@@ -18,7 +18,9 @@ class CreateMessagesTable extends Migration
             $table->foreignId('party_id')
             ->references('id')->on('parties')
             ->onDelete('cascade');
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')
+            ->references('id')->on('users')
+            ->onDelete('cascade');
             $table->text("text");
             $table->timestamps();
         });
