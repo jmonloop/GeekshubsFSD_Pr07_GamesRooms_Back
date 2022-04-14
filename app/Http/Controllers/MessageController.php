@@ -30,6 +30,7 @@ class MessageController extends Controller
         $message = Message::create([
             'party_id' => $request->party_id,
             'user_id' => $request->user_id,
+            'text'=> $request->text
         ]);
     
         return response()->json($message, 200);
@@ -62,7 +63,6 @@ class MessageController extends Controller
 
         return response()->json($messages, 200);
     }
-
 
     //UPDATE MESSAGE
     public function update($id, Request $request)
