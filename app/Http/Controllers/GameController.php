@@ -13,100 +13,159 @@ class GameController extends Controller
     //CREATE GAME
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'image' => 'required|string',
-        ]);
+        try {
 
-        if ($validator->fails()) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string|max:255',
+                'image' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'Validation failed',
+                    $validator->errors()
+                ], 400);
+            }
+
+            $game = Game::create([
+                'title' => $request->title,
+                'image' => $request->image,
+            ]);
+
+            $data = [
+                'data' => $game,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
             return response()->json([
-                'Validation failed',
-                $validator->errors()
+                'success' => false,
+                'message' => $e->getMessage(),
             ], 400);
         }
-
-        $game = Game::create([
-            'title' => $request->title,
-            'image' => $request->image,
-        ]);
-    
-        return response()->json($game, 200);
     }
 
     //GET GAME BY ID
     public function getById($id)
     {
-        $game = Game::find($id);
+        try {
+            $game = Game::find($id);
 
-        if (!$game) {
+            if (!$game) {
+                return response()->json([
+                    'message' => 'Game not found'
+                ], 404);
+            }
+
+            $data = [
+                'data' => $game,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
             return response()->json([
-                'message' => 'Game not found'
-            ], 404);
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
         }
-
-        return response()->json($game, 200);
     }
 
     //GET ALL GAMES
     public function getAll()
     {
-        $games = Game::all();
+        try {
+            $games = Game::all();
 
-        if (!$games) {
+            if (!$games) {
+                return response()->json([
+                    'message' => 'No games found'
+                ], 404);
+            }
+
+            $data = [
+                'data' => $games,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
             return response()->json([
-                'message' => 'No games found'
-            ], 404);
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
         }
-
-        return response()->json($games, 200);
     }
 
 
     //UPDATE GAME
     public function update($id, Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'image' => 'required|string',
-        
-        ]);
+        try {
 
-        if ($validator->fails()) {
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|string',
+
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'Validation failed',
+                    $validator->errors()
+                ], 400);
+            }
+
+            $game = Game::find($id);
+
+            if (!$game) {
+                return response()->json([
+                    'message' => 'Game not found'
+                ], 404);
+            }
+
+            $game->title = $request->title;
+
+
+            $data = [
+                'data' => $game,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
             return response()->json([
-                'Validation failed',
-                $validator->errors()
+                'success' => false,
+                'message' => $e->getMessage(),
             ], 400);
         }
-
-        $game = Game::find($id);
-
-        if (!$game) {
-            return response()->json([
-                'message' => 'Game not found'
-            ], 404);
-        }
-
-        $game->title = $request->title;
-    
-
-        return response()->json($game, 200);
     }
 
     //DELETE GAME
     public function delete($id)
     {
-        $game = Game::find($id);
+        try {
 
-        if (!$game) {
+            $game = Game::find($id);
+
+            if (!$game) {
+                return response()->json([
+                    'message' => 'Game not found'
+                ], 404);
+            }
+
+            $game->delete();
+
             return response()->json([
-                'message' => 'Game not found'
-            ], 404);
+                'message' => 'Game deleted'
+            ], 200);
+            
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
         }
-
-        $game->delete();
-
-        return response()->json([
-            'message' => 'Game deleted'
-        ], 200);
     }
-
 }

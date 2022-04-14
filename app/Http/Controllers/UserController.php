@@ -12,48 +12,99 @@ class UserController extends Controller
     //GET USER BY ID
     public function getById($id)
     {
-        $user = User::find($id);
-        return response()->json($user);
+        try {
+            $user = User::find($id);
+
+            $data = [
+                'data' => $user,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
 
 
     //GET ALL USERS
     public function getAll()
     {
-        $users = User::all();
-        return response()->json($users);
+        try {
+            $users = User::all();
+
+            $data = [
+                'data' => $users,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
 
 
     //UPDATE USER
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255|unique:users',
-        ]);
 
-        if ($validator->fails()) {
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|string|email|max:255|unique:users',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'Validation failed',
+                    $validator->errors()
+                ], 400);
+            }
+
+            $user = User::find($id);
+            $user->email = $request->email;
+
+            $user->save();
+
+            $data = [
+                'data' => $user,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
             return response()->json([
-                'Validation failed',
-                $validator->errors()
+                'success' => false,
+                'message' => $e->getMessage(),
             ], 400);
         }
-
-        $user = User::find($id);
-        $user->email = $request->email;
-
-        $user->save();
-
-        return response()->json($user);
     }
 
 
     //DELETE USER
     public function delete($id)
     {
-        $user = User::find($id);
-        $user->delete();
+        try {
+            $user = User::find($id);
+            $user->delete();
 
-        return response()->json($user);
+            $data = [
+                'data' => $user,
+                'success' => true,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
 }
