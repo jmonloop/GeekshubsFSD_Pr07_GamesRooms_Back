@@ -16,7 +16,7 @@ class PartyController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'game_id' => 'required|integer',
-            'userOwner' => 'required|integer',
+            'ownerNickname' => 'required|string',
             'private' => 'required|boolean',
             'password' => 'required|string|max:255'
         ]);
@@ -31,7 +31,7 @@ class PartyController extends Controller
         $party = Party::create([
             'title' => $request->title,
             'game_id' => $request->game_id,
-            'userOwner' => $request->userOwner,
+            'ownerNickname' => $request->ownerNickname,
             'private' => $request->private,
             'password' => $request->password
         ]);
@@ -68,9 +68,9 @@ class PartyController extends Controller
     }
 
     //GET PARTIES BY USER
-    public function getByUser($id)
+    public function getByUser($ownerNickname)
     {
-        $parties = Party::where('userOwner', $id)->get();
+        $parties = Party::where('ownerNickname', $ownerNickname)->get();
 
         if (!$parties) {
             return response()->json([
@@ -99,11 +99,10 @@ class PartyController extends Controller
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'game_id' => 'required|integer',
-            'userOwner' => 'required|integer',
-            'private' => 'required|boolean',
-            'password' => 'required|string|max:255'
+            'title' => 'string|max:255',
+            'game_id' => 'integer',
+            'ownerNickname' => 'string',
+            'private' => 'boolean',
         ]);
 
         if ($validator->fails()) {
@@ -121,12 +120,7 @@ class PartyController extends Controller
             ], 404);
         }
 
-        $party->title = $request->title;
-        $party->game_id = $request->game_id;
-        $party->userOwner = $request->userOwner;
-        $party->private = $request->private;
-        $party->password = $request->password;
-        $party->save();
+        $party->fill($request->all())->save();
 
         return response()->json($party, 200);
     }

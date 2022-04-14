@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ use App\Http\Controllers\GameController;
 //AUTHS
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::put('/parties/{id}', [PartyController::class, 'update']);
 
 Route::group([
     'middleware' => 'jwt.auth'
@@ -40,10 +43,10 @@ Route::group([
     //PARTIES
     Route::post('/parties', [PartyController::class, 'create']);
     Route::get('/parties', [PartyController::class, 'getAll']);
-    Route::get('/parties/getByUser/{id}', [PartyController::class, 'getByUser']);
+    Route::get('/parties/getByUser/{ownerNickname}', [PartyController::class, 'getByUser']);
     Route::get('/parties/getByGame/{id}', [PartyController::class, 'getByGame']);
     Route::get('/parties/{id}', [PartyController::class, 'getById']);
-    Route::put('/parties/{id}', [PartyController::class, 'update']);
+    // Route::put('/parties/{id}', [PartyController::class, 'update']);
     Route::delete('/parties/{id}', [PartyController::class, 'delete']);
 
 
@@ -62,5 +65,9 @@ Route::group([
     Route::get('/games/{id}', [GameController::class, 'getById']);
     Route::put('/games/{id}', [GameController::class, 'update']);
     Route::delete('/games/{id}', [GameController::class, 'delete']);
+
+
+    //MESSAGES
+
 
 });

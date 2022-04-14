@@ -17,7 +17,7 @@ class Party extends Model
     protected $fillable = [
         'title',
         'game_id',
-        'userOwner',
+        'ownerNickname',
         'private',
         'password'
     ];
@@ -25,13 +25,16 @@ class Party extends Model
 
 
     // use HasFactory;
-    public function message (){
+    public function message ()
+    {
         return $this -> hasMany(Message::class);
     }
-    public function game (){
+    public function game ()
+    {
         return $this -> belongsTo(Game::class);
     }
-    public function membership (){
+    public function membership ()
+    {
         return $this -> belongsTo(Membership::class);
     }
         
