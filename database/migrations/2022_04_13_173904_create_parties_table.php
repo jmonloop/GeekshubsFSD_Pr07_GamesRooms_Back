@@ -16,7 +16,9 @@ class CreatePartiesTable extends Migration
         Schema::create('parties', function (Blueprint $table) {
             $table->id();
             $table->string('title', 50);
-            $table->foreignId('game_id')->references('id')->on('games');
+            $table->foreignId('game_id')
+                ->references('id')->on('games')
+                ->onDelete('cascade');
             $table->string('ownerNickname');
             $table->boolean('private')->default(false);
             $table->string('password')->default('');
