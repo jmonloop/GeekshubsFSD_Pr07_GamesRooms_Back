@@ -38,7 +38,7 @@ The database has 5 tables:
         Many-To-One with Users table
         Many-To-One with Parties table
 
-![ScreenShot](https://raw.githubusercontent.com/jmonloop/GeekshubsFSD_Pr07_GamesRooms_Back/blob/dev/resources/screenshots/relations.jpg)
+![ScreenShot](https://raw.githubusercontent.com/jmonloop/GeekshubsFSD_Pr07_GamesRooms_Back/master/resources/screenshots/relations.jpg)
 
 
 
