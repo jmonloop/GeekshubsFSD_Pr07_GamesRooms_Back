@@ -23,14 +23,14 @@ class PartyController extends Controller
                 'private' => 'required|boolean',
                 'password' => 'required|string|max:255'
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'Validation failed',
                     $validator->errors()
                 ], 400);
             }
-    
+
             $party = Party::create([
                 'title' => $request->title,
                 'game_id' => $request->game_id,
@@ -71,7 +71,6 @@ class PartyController extends Controller
                 'success' => true,
             ];
             return response()->json($data, 200);
-
         } catch (\Exception $e) {
 
             return response()->json([
@@ -170,6 +169,9 @@ class PartyController extends Controller
     {
 
         try {
+            //Get user by auth token
+            $userAuth = auth()->user();
+
 
             $validator = Validator::make($request->all(), [
                 'title' => 'string|max:255',
@@ -177,22 +179,31 @@ class PartyController extends Controller
                 'ownerNickname' => 'string',
                 'private' => 'boolean',
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'Validation failed',
                     $validator->errors()
                 ], 400);
             }
-    
+
             $party = Party::find($id);
-    
+
             if (!$party) {
                 return response()->json([
                     'message' => 'Party not found'
                 ], 404);
             }
-    
+
+            //The party can only be updated by an admin or the owner of the party
+            if (($userAuth->isAdmin == false) && ($userAuth->nickname != $party->ownerNickname)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "You don't have permissions to perform this action"
+                ], 400);
+            }
+
+
             $party->fill($request->all())->save();
 
             $data = [
@@ -200,7 +211,6 @@ class PartyController extends Controller
                 'success' => true,
             ];
             return response()->json($data, 200);
-
         } catch (\Exception $e) {
 
             return response()->json([
@@ -213,8 +223,12 @@ class PartyController extends Controller
     //DELETE PARTY
     public function delete($id)
     {
-        
+
         try {
+            //Get user by auth token
+            $userAuth = auth()->user();
+
+
 
             $party = Party::find($id);
 
@@ -223,13 +237,20 @@ class PartyController extends Controller
                     'message' => 'Party not found'
                 ], 404);
             }
-    
+
+            //The party can only be deleted by an admin or the owner of the party
+            if (($userAuth->isAdmin == false) && ($userAuth->nickname != $party->ownerNickname)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "You don't have permissions to perform this action"
+                ], 400);
+            }
+
             $party->delete();
-    
+
             return response()->json([
                 'message' => 'Party deleted'
             ], 200);
-
         } catch (\Exception $e) {
 
             return response()->json([
@@ -238,5 +259,4 @@ class PartyController extends Controller
             ], 400);
         }
     }
-
 }

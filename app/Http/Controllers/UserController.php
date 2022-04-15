@@ -69,8 +69,10 @@ class UserController extends Controller
     {
 
         try {
+            //Get user by auth token
             $userAuth = auth()->user();
 
+            //The user can only be updated by an Admin or the owner
             if (($userAuth->isAdmin == false) && ($userAuth->id != $id)) {
                 return response()->json([
                     'success' => false,
@@ -113,8 +115,10 @@ class UserController extends Controller
     public function delete($id)
     {
         try {
+            //Get user by auth token
             $userAuth = auth()->user();
 
+            //The user can only be deleted by an Admin or the owner
             if (($userAuth->isAdmin == false) && ($userAuth->id != $id)) {
                 return response()->json([
                     'success' => false,

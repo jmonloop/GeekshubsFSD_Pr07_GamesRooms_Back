@@ -103,6 +103,16 @@ class GameController extends Controller
     public function update($id, Request $request)
     {
         try {
+            //Get user by auth token
+            $userAuth = auth()->user();
+
+            //The game can only be updated by an Admin
+            if ($userAuth->isAdmin == false) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "You don't have permissions to perform this action"
+                ], 400);
+            }
 
             $validator = Validator::make($request->all(), [
                 'image' => 'required|string',
@@ -145,6 +155,16 @@ class GameController extends Controller
     public function delete($id)
     {
         try {
+            //Get user by auth token
+            $userAuth = auth()->user();
+
+             //The game can only be deleted by an Admin
+            if ($userAuth->isAdmin == false) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "You don't have permissions to perform this action"
+                ], 400);
+            }
 
             $game = Game::find($id);
 
@@ -159,7 +179,6 @@ class GameController extends Controller
             return response()->json([
                 'message' => 'Game deleted'
             ], 200);
-            
         } catch (\Exception $e) {
 
             return response()->json([

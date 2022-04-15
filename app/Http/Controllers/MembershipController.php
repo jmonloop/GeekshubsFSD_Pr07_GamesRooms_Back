@@ -134,12 +134,23 @@ class MembershipController extends Controller
     {
 
         try {
+            //Get user by auth token
+            $userAuth = auth()->user();
 
             $membership = Membership::find($id);
 
             if (!$membership) {
                 return response()->json(['message' => 'Membership not found'], 404);
             } else {
+
+                //The membership can only be deleted by an Admin or the user who created it
+                if (($userAuth->isAdmin == false) && ($userAuth->id != $membership->user_id)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "You don't have permissions to perform this action"
+                    ], 400);
+                }
+
                 $membership->delete();
 
                 return response()->json(['message' => 'The membership has been removed'], 200);
