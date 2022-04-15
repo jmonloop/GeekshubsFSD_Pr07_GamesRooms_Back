@@ -1,64 +1,289 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# LFG Web Application Backend
+This is my seventh project of GeeksHubs Academy FSD bootcamp.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The objective is to create an API restful backend simulating a "Look For Group" application like GamerLink or Discord.
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+[Architecture](#architecture)
+    
+[Installation](#installation)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+[How to test the project](#how-to-test-the-project)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+[Endpoints](#endpoints)
 
-## Learning Laravel
+[Thanks](#thanks)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Architecture
 
-### Premium Partners
+The database has 5 tables:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+    1 Users: User profiles. Related:
+        One-To-Many with Memberships table
+        One-To-Many with Messages table
 
-## Contributing
+    2 Parties: The different groups of Users for the games. Related:
+        One-To-Many with Memberships table
+        Many-To-One with Games table
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    3 Memberships: Relational table between Users and Parties.
 
-## Code of Conduct
+    4 Games: Each game that contains different Parties. Related:
+        One-To-Many with Parties table
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    5 Messages: The messages that Users send into each Party. Related:
+        Many-To-One with Users table
+        Many-To-One with Parties table
 
-## Security Vulnerabilities
+![ScreenShot](https://raw.githubusercontent.com/jmonloop/GeekshubsFSD_Pr07_GamesRooms_Back/master/resources/screenshots/relations.jpg)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Installation
+The project is fully deployed in Heroku server so you only need to download Postman application for testing it.
+
+### Postman
+1 Download and install [Postman](https://www.postman.com/downloads/)
+
+2 Download the file ..resources/postman/gamesRoom Laravel.postman_collection.json from this respository
+
+3 Open Postman and click on Import
+![ScreenShot](https://raw.githubusercontent.com/jmonloop/GeekshubsFSD_Pr04_VideoStoreBackend/master/assets/postman_import.jpg)
+
+4 Upload gamesRoom Laravel.postman_collection.json file and Import it
+
+5 Expand the new videoStore tab and all the endpoints will be shown
+
+
+
+## How to test the project 
+In Postman, select the request you want to test from videoStore collection, configure the inputs if needed and click "Send".
+
+You can also do it manually: select CRUD method, copy the endpoint URL, configure inputs if needed and click "Send".
+
+
+### Token requests
+* As Json Web Token authentication has been used, there are some requests that need a token to be present in header to authenticate that the user has been logged in. If you try to send this request without being login first, the request will not take place and an "Unauthorized" message will be shown.
+
+
+To execute this type of requests you need to:
+
+    1. Request login with a valid user and password registered in DB
+    2. Copy the token responsed by Postman excluding the ""
+    3. In the request which needs authetication, go to "Authorization", click in "Type" tab 
+    and select "Bearer Token" option.
+    4. Paste the token in the field.
+    5. Send request
+![ScreenShot](https://raw.githubusercontent.com/jmonloop/GeekshubsFSD_Pr04_VideoStoreBackend/master/assets/postman_auth.jpg)
+
+
+### Admin role requests
+* There is another type of request in which you need to be logged with an "isAdmin" role user profile for being executed.
+* For that requests you only need to login with that user and copy the token in the autorization field. 
+
+
+## Endpoints
+
+* [USERS](#users)
+
+* [PARTIES](#parties)
+
+* [GAMES](#games)
+
+* [MEMBERSHIPS](#memberships)
+
+* [MESSAGES](#messages)
+
+
+## USERS
+### REGISTER
+
+    https://games-rooms.herokuapp.com/api/register (post)
+
+    Body example:
+    {
+        "nickname": "javi",
+        "email": "javi@gmail.com",
+        "password": "1234"
+    }
+
+### LOGIN
+
+    https://games-rooms.herokuapp.com/api/login (post)
+
+    {
+        "email": "javi@gmail.com",
+        "password": "1234"
+    }
+
+### UPDATE USER
+
+    https://games-rooms.herokuapp.com/api/users/<userID> (put)
+
+    {
+        "email": "javiMOD@gmail.com"
+    }
+
+### DELETE USER
+
+    https://games-rooms.herokuapp.com/api/users/<userID> (delete)
+
+
+### GET ALL USERS
+
+    https://games-rooms.herokuapp.com/api/users (get)
+
+### GET USER BY ID
+
+    https://games-rooms.herokuapp.com/api/users/<userID> (get)
+
+
+## PARTIES
+
+### CREATE PARTY
+
+    https://games-rooms.herokuapp.com/api/parties (post)
+
+    {
+        "title": "test",
+        "game_id": 11,
+        "ownerNickname":"test",
+        "private":true,
+        "password":"1234"
+    }
+
+### GET PARTY BY ID
+
+    https://games-rooms.herokuapp.com/api/parties/<partyID> (get)
+
+### GET ALL PARTIES
+
+    https://games-rooms.herokuapp.com/api/parties (get)
+
+### GET PARTIES BY USER NICKNAME
+
+    https://games-rooms.herokuapp.com/api/parties/getByUser/<userNickname> (get)
+
+### GET PARTIES BY GAME ID
+
+    https://games-rooms.herokuapp.com/api/parties/getByGame/<gameID> (get)
+
+### UPDATE PARTY
+
+    https://games-rooms.herokuapp.com/api/parties/getByGame/<partyID> (put)
+
+    {
+    "title": "testMOD",
+    "ownerNickname": "another"
+    }
+
+### DELETE PARTY
+
+    https://games-rooms.herokuapp.com/api/parties/<partyID> (delete)
+
+
+## GAMES
+
+### CREATE GAME
+
+    https://games-rooms.herokuapp.com/api/games (post)
+
+    {
+        "title": "GTA 5",
+        "image": "https://fakeimgurl.com"
+    }
+
+### GET GAME BY ID
+
+    https://games-rooms.herokuapp.com/api/games/<gameID> (get)
+
+### GET ALL GAMES
+
+    https://games-rooms.herokuapp.com/api/games (get)
+
+### UPDATE GAME
+
+    https://games-rooms.herokuapp.com/api/games/<gameID> (put)
+
+    {
+    "image": "https://fakeimgurlMOD.com"
+    }
+
+### DELETE GAME
+
+    https://games-rooms.herokuapp.com/api/games/<gameID> (delete)
+
+
+## MEMBERSHIPS
+
+### CREATE MEMBERSHIP
+
+    https://games-rooms.herokuapp.com/api/memberships (post)
+
+    {
+        "user_id":51,
+        "party_id":11
+    }
+
+### GET ALL MEMBERSHIPS
+
+    https://games-rooms.herokuapp.com/api/memberships (get)
+
+### GET MEMBERSHIPS BY USER ID
+
+    https://games-rooms.herokuapp.com/api/memberships/user/<userID> (get)
+
+### GET MEMBERSHIPS BY PARTY ID
+
+    https://games-rooms.herokuapp.com/api/memberships/party/<partyID> (get)
+
+### GET MEMBERSHIP BY ID
+
+    https://games-rooms.herokuapp.com/api/memberships/<partyID> (get)
+
+### DELETE MEMBERSHIP
+
+    https://games-rooms.herokuapp.com/api/memberships/<partyID> (delete)
+
+
+## MESSAGES
+
+### CREATE MESSAGE
+
+    https://games-rooms.herokuapp.com/api/messages (post)
+
+    {
+        "party_id":11,
+        "user_id":51,
+        "text":"I am the message content"
+    }
+
+### GET MESSAGE BY ID
+
+    https://games-rooms.herokuapp.com/api/messages/<messageID> (get)
+
+### GET ALL MESSAGES
+
+    https://games-rooms.herokuapp.com/api/messages (get)
+
+### UPDATE MESSAGE
+
+    https://games-rooms.herokuapp.com/api/messages/<messageID> (put)
+
+### DELETE MESSAGE
+
+    https://games-rooms.herokuapp.com/api/messages/<messageID> (delete)
+
+
+## Thanks
+
+* Thanks to GeeksHubs Academy for the training received (https://github.com/GeeksHubsAcademy)
+
+* Thanks to everyone who spends time spreading their knowledge in Stack Overflow.
+
+* Created by Javier Monleón López (https://github.com/jmonloop)
+
+
